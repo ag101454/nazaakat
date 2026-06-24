@@ -1,27 +1,85 @@
-// src/services/storageService.js
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { storage } from './firebase';
+// Free storage using browser LocalStorage
+// Data persists even after page refresh
 
-export const uploadImage = async (file, path = 'products') => {
-  const timestamp = Date.now();
-  const fileName = `${path}/${timestamp}_${file.name}`;
-  const storageRef = ref(storage, fileName);
-  
-  await uploadBytes(storageRef, file);
-  return await getDownloadURL(storageRef);
-};
+const PRODUCTS_KEY = 'nazaakat_products';
+const ORDERS_KEY = 'nazaakat_orders';
 
-export const uploadMultipleImages = async (files, path = 'products') => {
-  return await Promise.all(
-    files.map(file => uploadImage(file, path))
-  );
-};
-
-export const deleteImage = async (imageUrl) => {
+// Save products
+export const saveProducts = (products) => {
   try {
-    const imageRef = ref(storage, imageUrl);
-    await deleteObject(imageRef);
+    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    return true;
   } catch (error) {
-    console.error('Error deleting image:', error);
+    console.error('Error saving products:', error);
+    return false;
   }
+};
+
+// Get products
+export const getProducts = () => {
+  try {
+    const data = localStorage.getItem(PRODUCTS_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error loading products:', error);
+    return [];
+  }
+};
+
+// Add single product
+export const addProduct = (product) => {
+  const products = getProducts();
+  product.id = Date.now().toString();
+  product.createdAt = new Date().toISOString();
+  products.unshift(product);
+  saveProducts(products);
+  return product;
+};
+
+// Delete product
+export const deleteProduct = (id) => {
+  const products = getProducts().filter(p => p.id !== id);
+  saveProducts(products);
+  return true;
+};
+
+// Save orders
+export const saveOrders = (orders) => {
+  try {
+    localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+    return true;
+  } catch (error) {
+    console.error('Error saving orders:', error);
+    return false;
+  }
+};
+
+// Get orders
+export const getOrders = () => {
+  try {
+    const data = localStorage.getItem(ORDERS_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch (error) {
+    console.error('Error loading orders:', error);
+    return [];
+  }
+};
+
+// Add order
+export const addOrder = (order) => {
+  const orders = getOrders();
+  order.id = 'NZK-' + Date.now().toString(36).toUpperCase();
+  order.createdAt = new Date().toISOString();
+  order.status = 'pending';
+  orders.unshift(order);
+  saveOrders(orders);
+  return order;
+};
+
+// Update order status
+export const updateOrderStatus = (id, status) => {
+  const orders = getOrders();
+  const updated = orders.map(o => o.id === id ? { ...o, status, updatedAt: new Date().toISOString() } : o);
+  saveOrders(updated);
+  return true;
 };

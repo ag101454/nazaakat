@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Package, ShoppingBag, LogOut, Menu, X, ArrowLeft, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ADMIN_PASSWORD = 'nazakkat2024';
+const ADMIN_PASSWORD = 'nazaakat12345/67890';
 
 const sidebarLinks = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/admin' },
@@ -52,7 +52,7 @@ export default function AdminLayout() {
               transition={{ duration: 2, repeat: Infinity }}
               className="text-5xl font-serif text-white tracking-wider"
             >
-              NAZAKKAT
+              NAZAAKAT
             </motion.h1>
             <p className="text-gold-500 text-sm mt-2 tracking-widest uppercase">Admin Panel</p>
           </div>

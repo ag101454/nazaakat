@@ -1,17 +1,15 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: "AIzaSyDJiStXeYSkV2ZDWp-_mjuGmk_B1bZ7nS4",
+  authDomain: "nazakkat-store.firebaseapp.com",
+  projectId: "nazakkat-store",
+  storageBucket: "nazakkat-store.firebasestorage.app",
+  messagingSenderId: "837371637067",
+  appId: "1:837371637067:web:26f49153c5b1acfb970cce",
+  measurementId: "G-0BVXMZR49D"
 };
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
-export const storage = getStorage(app);
-export default app;

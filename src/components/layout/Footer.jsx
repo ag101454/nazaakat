@@ -22,10 +22,10 @@ const TikTokIcon = ({ className = "w-5 h-5" }) => (
 );
 
 const socialLinks = [
-  { icon: InstagramIcon, href: 'https://instagram.com/nazaakat', label: 'Instagram', color: 'hover:bg-gradient-to-br hover:from-purple-500 hover:to-pink-500' },
-  { icon: FacebookIcon, href: 'https://facebook.com/nazaakat', label: 'Facebook', color: 'hover:bg-blue-600' },
+  { icon: InstagramIcon, href: 'https://www.instagram.com/nazaakatofficial1?igsh=MXdyMGhmeGJ3Ymh4cQ==', label: 'Instagram', color: 'hover:bg-gradient-to-br hover:from-purple-500 hover:to-pink-500' },
+  { icon: FacebookIcon, href: 'https://www.facebook.com/share/193Su8v3qo/', label: 'Facebook', color: 'hover:bg-blue-600' },
   { icon: TikTokIcon, href: 'https://tiktok.com/@nazaakat', label: 'TikTok', color: 'hover:bg-black hover:text-white' },
-  { icon: MessageCircle, href: 'https://wa.me/923001234567', label: 'WhatsApp', color: 'hover:bg-green-500' },
+  { icon: MessageCircle, href: 'https://wa.me/923407146871', label: 'WhatsApp', color: 'hover:bg-green-500' },
 ];
 
 export default function Footer() {
@@ -68,15 +68,15 @@ export default function Footer() {
             <div className="space-y-2.5 mt-6">
               <a href="tel:+923001234567" className="flex items-center gap-2.5 text-gray-400 hover:text-gold-500 transition-colors text-sm">
                 <Phone size={15} className="text-gold-500 flex-shrink-0" />
-                +92 300 1234567
+                +92 340 7146871
               </a>
-              <a href="mailto:hello@nazaakat.com" className="flex items-center gap-2.5 text-gray-400 hover:text-gold-500 transition-colors text-sm">
+              <a href="mailto:nazaakatofficial384@gmail.com" className="flex items-center gap-2.5 text-gray-400 hover:text-gold-500 transition-colors text-sm">
                 <Mail size={15} className="text-gold-500 flex-shrink-0" />
-                hello@nazaakat.com
+                nazaakatofficial384@gmail.com
               </a>
               <div className="flex items-center gap-2.5 text-gray-400 text-sm">
                 <MapPin size={15} className="text-gold-500 flex-shrink-0" />
-                Gulberg III, Lahore, Pakistan
+                Gulgasht Colony, Multan, Pakistan
               </div>
             </div>
           </div>
@@ -125,7 +125,7 @@ export default function Footer() {
             <h4 className="font-serif text-lg mb-5">Support</h4>
             <ul className="space-y-2.5">
               <li>
-                <a href="https://wa.me/923001234567" target="_blank" rel="noopener noreferrer" 
+                <a href="https://wa.me/923407146871" target="_blank" rel="noopener noreferrer" 
                    className="text-gray-400 hover:text-green-500 transition-colors text-sm flex items-center gap-1 group">
                   WhatsApp Order
                   <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -175,7 +175,7 @@ export default function Footer() {
               </div>
             </div>
             <a
-              href="https://wa.me/923001234567"
+              href="https://wa.me/923407146871"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-full text-sm font-medium hover:bg-green-700 transition-colors shadow-lg shadow-green-500/20"
@@ -192,8 +192,7 @@ export default function Footer() {
         <div className="container-custom py-5">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3">
             <p className="text-gray-500 text-xs flex items-center gap-1">
-              &copy; {new Date().getFullYear()} NAZAAKAT. Made with 
-              <Heart size={12} className="text-red-500 fill-red-500" /> 
+              &copy; {new Date().getFullYear()} NAZAAKAT. Made 
               in Pakistan | Elegance in Every Detail
             </p>
             <div className="flex items-center gap-5 text-xs text-gray-500">

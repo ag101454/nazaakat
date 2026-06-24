@@ -20,17 +20,17 @@ export default function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const whatsappMsg = `Hello NAZAAKAT!%0A%0A*Name:* ${form.name}%0A*Email:* ${form.email}%0A*Phone:* ${form.phone}%0A*Subject:* ${form.subject}%0A*Message:* ${form.message}`;
-    window.open(`https://wa.me/923001234567?text=${whatsappMsg}`, '_blank');
+    window.open(`https://wa.me/923407146871?text=${whatsappMsg}`, '_blank');
     setSubmitted(true);
     setForm({ name: '', email: '', phone: '', subject: '', message: '' });
     setTimeout(() => setSubmitted(false), 5000);
   };
 
   const contactCards = [
-    { icon: Phone, label: 'Call Us', value: '+92 300 1234567', link: 'tel:+923001234567', color: 'text-blue-600', bg: 'bg-blue-50' },
-    { icon: MessageCircle, label: 'WhatsApp', value: '+92 300 1234567', link: 'https://wa.me/923001234567', color: 'text-green-600', bg: 'bg-green-50' },
-    { icon: Mail, label: 'Email', value: 'hello@nazaakat.com', link: 'mailto:hello@nazaakat.com', color: 'text-purple-600', bg: 'bg-purple-50' },
-    { icon: MapPin, label: 'Address', value: 'Gulberg III, Lahore', color: 'text-orange-600', bg: 'bg-orange-50' },
+    { icon: Phone, label: 'Call Us', value: '+92 340 7146871', link: 'tel:+923407146871', color: 'text-blue-600', bg: 'bg-blue-50' },
+    { icon: MessageCircle, label: 'WhatsApp', value: '+92 300 1234567', link: 'https://wa.me/923407146871', color: 'text-green-600', bg: 'bg-green-50' },
+    { icon: Mail, label: 'Email', value: 'nazaakatofficial384@gmail.com', link: 'mailto:hello@nazaakat.com', color: 'text-purple-600', bg: 'bg-purple-50' },
+    { icon: MapPin, label: 'Address', value: 'Gulgasht Colony, Multan', color: 'text-orange-600', bg: 'bg-orange-50' },
   ];
 
   return (
@@ -246,7 +246,7 @@ export default function Contact() {
                 <h3 className="font-medium text-green-800 mb-1">Quick Chat</h3>
                 <p className="text-green-600 text-xs mb-4">Prefer instant messaging?</p>
                 <a 
-                  href="https://wa.me/923001234567" 
+                  href="https://wa.me/923407146871" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-full text-sm font-medium hover:bg-green-700 transition-colors"

@@ -1,18 +1,15 @@
 import { collection, addDoc, updateDoc, doc, getDocs, getDoc, query, orderBy } from 'firebase/firestore';
 import { db } from './firebase';
+import { AIAgent } from './aiAgent';
 
 const COLLECTION = 'orders';
 
-// Create order
+// Create order with AI processing
 export const createOrder = async (orderData) => {
   try {
-    const docRef = await addDoc(collection(db, COLLECTION), {
-      ...orderData,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-    return docRef.id;
+    // Process through AI Agent
+    const result = await AIAgent.processOrder(orderData);
+    return result;
   } catch (error) {
     console.error('Error creating order:', error);
     throw error;
@@ -43,16 +40,52 @@ export const getOrderById = async (id) => {
   }
 };
 
-// Update order status (accept/reject)
-export const updateOrderStatus = async (id, status) => {
+// Update order status (Accept/Reject)
+export const updateOrderStatus = async (id, status, notes = '') => {
   try {
+    const timeline = [{
+      status: status === 'accepted' ? 'Order Accepted' : 'Order Rejected',
+      time: new Date().toISOString(),
+      message: notes || `Order ${status} by admin`
+    }];
+
     await updateDoc(doc(db, COLLECTION, id), {
       status,
       updatedAt: new Date().toISOString(),
+      timeline
     });
+
     return true;
   } catch (error) {
     console.error('Error updating order:', error);
     return false;
+  }
+};
+
+// Get order analytics
+export const getOrderAnalytics = async () => {
+  try {
+    const orders = await getAllOrders();
+    
+    const analytics = {
+      total: orders.length,
+      pending: orders.filter(o => o.status === 'pending').length,
+      accepted: orders.filter(o => o.status === 'accepted').length,
+      rejected: orders.filter(o => o.status === 'rejected').length,
+      autoAccepted: orders.filter(o => o.autoAccepted).length,
+      revenue: orders
+        .filter(o => o.status === 'accepted')
+        .reduce((sum, o) => sum + (o.totalPrice || 0), 0),
+      highRisk: orders.filter(o => o.aiAnalysis?.riskLevel === 'high').length,
+      todayOrders: orders.filter(o => {
+        const today = new Date().toDateString();
+        return new Date(o.createdAt).toDateString() === today;
+      }).length,
+    };
+
+    return analytics;
+  } catch (error) {
+    console.error('Error getting analytics:', error);
+    return null;
   }
 };

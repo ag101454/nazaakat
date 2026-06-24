@@ -129,7 +129,7 @@ const MobileMenu = () => {
 
             <div className="p-4 border-t border-white/10 space-y-3">
               <a
-                href="https://wa.me/923001234567?text=I'm%20interested%20in%20NAZAKKAT%20products"
+                href="https://wa.me/923407146871?text=I'm%20interested%20in%20NAZAKKAT%20products"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center gap-2 w-full py-3 

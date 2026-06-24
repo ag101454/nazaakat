@@ -186,7 +186,7 @@ export default function Home() {
             </motion.div>
             <h2 className="section-title mb-4">Order via WhatsApp</h2>
             <p className="text-gray-400 text-lg mb-10 max-w-md mx-auto">Chat with us for personalized assistance</p>
-            <a href="https://wa.me/923001234567" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/923407146871" target="_blank" rel="noopener noreferrer">
               <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                 className="px-10 py-5 bg-green-600 text-white rounded-full text-lg font-medium hover:bg-green-700 inline-flex items-center gap-3">
                 <MessageCircle size={22} /> Chat on WhatsApp

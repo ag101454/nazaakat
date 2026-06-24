@@ -243,7 +243,7 @@ export default function About() {
             </motion.div>
             <h2 className="text-3xl font-serif mb-4">Want to Know More?</h2>
             <p className="text-gray-400 mb-8">Chat with us on WhatsApp for any questions</p>
-            <a href="https://wa.me/923001234567" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/923407146871" target="_blank" rel="noopener noreferrer">
               <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                 className="px-8 py-3 bg-green-600 text-white rounded-full font-medium hover:bg-green-700 inline-flex items-center gap-2">
                 <MessageCircle size={20} /> Chat with Us

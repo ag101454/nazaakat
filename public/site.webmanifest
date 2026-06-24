@@ -1,0 +1,21 @@
+{
+    "name": "NAZAAKAT - Luxury Pakistani Fashion",
+    "short_name": "NAZAAKAT",
+    "description": "Premium Pakistani luxury fashion - bags, jewelry & accessories",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0D0D0D",
+    "theme_color": "#D4940D",
+    "icons": [
+      {
+        "src": "/Logo-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      },
+      {
+        "src": "/Logo-512x512.png",
+        "sizes": "512x512",
+        "type": "image/png"
+      }
+    ]
+  }

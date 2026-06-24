@@ -60,11 +60,11 @@ function Navbar() {
         <div className="hidden md:block border-b border-white/10">
           <div className="max-w-7xl mx-auto px-4">
             <div className="flex items-center justify-end gap-4 py-1.5">
-              <a href="https://instagram.com/nazaakat" target="_blank" rel="noopener noreferrer" 
+              <a href="https://www.instagram.com/nazaakatofficial1?igsh=MXdyMGhmeGJ3Ymh4cQ==" target="_blank" rel="noopener noreferrer" 
                  className="text-gray-400 hover:text-pink-400 transition-colors" title="Instagram">
                 <InstagramIcon />
               </a>
-              <a href="https://facebook.com/nazaakat" target="_blank" rel="noopener noreferrer" 
+              <a href="https://www.facebook.com/share/193Su8v3qo/" target="_blank" rel="noopener noreferrer" 
                  className="text-gray-400 hover:text-blue-400 transition-colors" title="Facebook">
                 <FacebookIcon />
               </a>
@@ -73,8 +73,8 @@ function Navbar() {
                 <TikTokIcon />
               </a>
               <span className="text-gray-600 text-xs mx-1">|</span>
-              <a href="tel:+923001234567" className="text-gray-400 hover:text-gold-500 text-xs transition-colors">
-                +92 300 1234567
+              <a href="tel:+923407146871" className="text-gray-400 hover:text-gold-500 text-xs transition-colors">
+                +92 340 7146871
               </a>
             </div>
           </div>
@@ -116,7 +116,7 @@ function Navbar() {
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                href="https://wa.me/923001234567"
+                href="https://wa.me/92340746871"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-green-600 text-white rounded-full text-xs font-medium hover:bg-green-700 transition-colors shadow-lg shadow-green-600/20"
@@ -199,7 +199,7 @@ function Navbar() {
                   transition={{ delay: 0.3 }}
                 >
                   <a
-                    href="https://wa.me/923001234567"
+                    href="https://wa.me/923407146871"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-2 py-3 px-2 text-green-400 text-base"
@@ -216,11 +216,11 @@ function Navbar() {
                   transition={{ delay: 0.4 }}
                   className="flex items-center gap-5 py-4 px-2 border-t border-gray-800 mt-2"
                 >
-                  <a href="https://instagram.com/nazaakat" target="_blank" rel="noopener noreferrer" 
+                  <a href="https://www.instagram.com/nazaakatofficial1?igsh=MXdyMGhmeGJ3Ymh4cQ==" target="_blank" rel="noopener noreferrer" 
                      className="text-gray-400 hover:text-pink-400 transition-colors" title="Instagram">
                     <InstagramIcon />
                   </a>
-                  <a href="https://facebook.com/nazaakat" target="_blank" rel="noopener noreferrer" 
+                  <a href="https://www.facebook.com/share/193Su8v3qo/" target="_blank" rel="noopener noreferrer" 
                      className="text-gray-400 hover:text-blue-400 transition-colors" title="Facebook">
                     <FacebookIcon />
                   </a>
@@ -229,8 +229,8 @@ function Navbar() {
                     <TikTokIcon />
                   </a>
                   <span className="text-gray-600 text-sm">|</span>
-                  <a href="tel:+923001234567" className="text-gray-400 hover:text-gold-500 text-sm transition-colors">
-                    +92 300 1234567
+                  <a href="tel:+923407146871" className="text-gray-400 hover:text-gold-500 text-sm transition-colors">
+                    +92 340 7146871
                   </a>
                 </motion.div>
               </motion.div>
