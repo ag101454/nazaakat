@@ -1,9 +1,8 @@
-// src/components/layout/Footer.jsx
 import { Link } from 'react-router-dom';
-import { MessageCircle, Phone, Mail, MapPin, ArrowRight, Heart } from 'lucide-react';
+import { MessageCircle, Phone, Mail, MapPin, ArrowRight, Heart, Shield, Lock } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-// Custom SVG Social Icons (Larger for footer)
+// Custom SVG Social Icons
 const InstagramIcon = ({ className = "w-5 h-5" }) => (
   <svg className={className} viewBox="0 0 24 24" fill="currentColor">
     <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>
@@ -23,9 +22,9 @@ const TikTokIcon = ({ className = "w-5 h-5" }) => (
 );
 
 const socialLinks = [
-  { icon: InstagramIcon, href: 'https://instagram.com/nazakkat', label: 'Instagram', color: 'hover:bg-gradient-to-br hover:from-purple-500 hover:to-pink-500' },
-  { icon: FacebookIcon, href: 'https://facebook.com/nazakkat', label: 'Facebook', color: 'hover:bg-blue-600' },
-  { icon: TikTokIcon, href: 'https://tiktok.com/@nazakkat', label: 'TikTok', color: 'hover:bg-black hover:text-white' },
+  { icon: InstagramIcon, href: 'https://instagram.com/nazaakat', label: 'Instagram', color: 'hover:bg-gradient-to-br hover:from-purple-500 hover:to-pink-500' },
+  { icon: FacebookIcon, href: 'https://facebook.com/nazaakat', label: 'Facebook', color: 'hover:bg-blue-600' },
+  { icon: TikTokIcon, href: 'https://tiktok.com/@nazaakat', label: 'TikTok', color: 'hover:bg-black hover:text-white' },
   { icon: MessageCircle, href: 'https://wa.me/923001234567', label: 'WhatsApp', color: 'hover:bg-green-500' },
 ];
 
@@ -33,17 +32,19 @@ export default function Footer() {
   return (
     <footer className="bg-black text-white">
       {/* Main Footer */}
-      <div className="container-custom py-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-          {/* Brand */}
+      <div className="container-custom py-16 md:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
+          
+          {/* Brand Column */}
           <div className="lg:col-span-2">
-            <Link to="/">
-              <h3 className="text-3xl font-serif tracking-wider">NAZAAKAT</h3>
+            <Link to="/" className="inline-block group">
+              <h3 className="text-3xl font-serif tracking-wider mb-1">NAZAAKAT</h3>
+              <div className="h-[1px] bg-gradient-to-r from-gold-500 to-transparent w-0 group-hover:w-full transition-all duration-500" />
             </Link>
-            <p className="text-gray-400 mt-4 leading-relaxed max-w-xs">
-              Elegance in Every Detail. Premium Pakistani luxury fashion for the modern woman.
+            <p className="text-gray-400 mt-4 leading-relaxed max-w-xs text-sm">
+              Elegance in Every Detail. Premium Pakistani luxury fashion — handcrafted bags, jewelry, and accessories for the modern woman.
             </p>
-            
+
             {/* Social Icons */}
             <div className="flex gap-3 mt-6">
               {socialLinks.map((social) => (
@@ -52,117 +53,132 @@ export default function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.15, y: -2 }}
+                  whileHover={{ scale: 1.15, y: -3 }}
                   whileTap={{ scale: 0.9 }}
-                  className={`w-11 h-11 rounded-full bg-white/10 flex items-center justify-center 
+                  className={`w-10 h-10 rounded-full bg-white/10 flex items-center justify-center 
                            text-gray-400 transition-all duration-300 ${social.color}`}
                   title={social.label}
                 >
-                  {typeof social.icon === 'function' ? <social.icon className="w-5 h-5" /> : <social.icon size={20} />}
+                  {typeof social.icon === 'function' ? <social.icon className="w-5 h-5" /> : <social.icon size={18} />}
                 </motion.a>
               ))}
             </div>
 
             {/* Contact Info */}
-            <div className="space-y-3 mt-8">
-              {[
-                { icon: Phone, text: '+92 300 1234567', href: 'tel:+923001234567' },
-                { icon: Mail, text: 'hello@nazakkat.com', href: 'mailto:hello@nazakkat.com' },
-                { icon: MapPin, text: 'Gulberg III, Lahore, Pakistan' },
-              ].map((item) => (
-                <div key={item.text} className="flex items-center gap-3 text-gray-400 text-sm">
-                  <item.icon size={16} className="text-gold-500" />
-                  {item.href ? (
-                    <a href={item.href} className="hover:text-gold-500 transition-colors">{item.text}</a>
-                  ) : (
-                    <span>{item.text}</span>
-                  )}
-                </div>
-              ))}
+            <div className="space-y-2.5 mt-6">
+              <a href="tel:+923001234567" className="flex items-center gap-2.5 text-gray-400 hover:text-gold-500 transition-colors text-sm">
+                <Phone size={15} className="text-gold-500 flex-shrink-0" />
+                +92 300 1234567
+              </a>
+              <a href="mailto:hello@nazaakat.com" className="flex items-center gap-2.5 text-gray-400 hover:text-gold-500 transition-colors text-sm">
+                <Mail size={15} className="text-gold-500 flex-shrink-0" />
+                hello@nazaakat.com
+              </a>
+              <div className="flex items-center gap-2.5 text-gray-400 text-sm">
+                <MapPin size={15} className="text-gold-500 flex-shrink-0" />
+                Gulberg III, Lahore, Pakistan
+              </div>
             </div>
           </div>
 
-          {/* Links */}
-          {[
-            { 
-              title: 'Shop', 
-              links: [
+          {/* Shop Links */}
+          <div>
+            <h4 className="font-serif text-lg mb-5">Shop</h4>
+            <ul className="space-y-2.5">
+              {[
+                { label: 'All Products', path: '/products' },
                 { label: 'Bags', path: '/products?category=bags' },
                 { label: 'Jewelry', path: '/products?category=jewelry' },
                 { label: 'Accessories', path: '/products?category=accessories' },
-                { label: 'New Arrivals', path: '/products?sort=newest' },
-                { label: 'All Products', path: '/products' },
-              ]
-            },
-            { 
-              title: 'Company', 
-              links: [
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link to={link.path} className="text-gray-400 hover:text-gold-500 transition-colors text-sm flex items-center gap-1 group">
+                    {link.label}
+                    <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company Links */}
+          <div>
+            <h4 className="font-serif text-lg mb-5">Company</h4>
+            <ul className="space-y-2.5">
+              {[
                 { label: 'About Us', path: '/about' },
                 { label: 'Contact Us', path: '/contact' },
                 { label: 'Track Order', path: '/track-order' },
-              ]
-            },
-            { 
-              title: 'Support', 
-              links: [
-                { label: 'FAQ', path: '#' },
-                { label: 'Shipping Info', path: '#' },
-                { label: 'Returns Policy', path: '#' },
-                { label: 'WhatsApp Order', path: 'https://wa.me/923001234567' },
-              ]
-            },
-          ].map((section) => (
-            <div key={section.title}>
-              <h4 className="font-serif text-lg mb-6">{section.title}</h4>
-              <ul className="space-y-3">
-                {section.links.map((link) => (
-                  <li key={link.label}>
-                    {link.path.startsWith('http') ? (
-                      <a 
-                        href={link.path}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-gray-400 hover:text-gold-500 transition-colors text-sm flex items-center gap-1 group"
-                      >
-                        {link.label}
-                        <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </a>
-                    ) : (
-                      <Link 
-                        to={link.path}
-                        className="text-gray-400 hover:text-gold-500 transition-colors text-sm flex items-center gap-1 group"
-                      >
-                        {link.label}
-                        <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                      </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+              ].map((link) => (
+                <li key={link.label}>
+                  <Link to={link.path} className="text-gray-400 hover:text-gold-500 transition-colors text-sm flex items-center gap-1 group">
+                    {link.label}
+                    <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Support & Admin */}
+          <div>
+            <h4 className="font-serif text-lg mb-5">Support</h4>
+            <ul className="space-y-2.5">
+              <li>
+                <a href="https://wa.me/923001234567" target="_blank" rel="noopener noreferrer" 
+                   className="text-gray-400 hover:text-green-500 transition-colors text-sm flex items-center gap-1 group">
+                  WhatsApp Order
+                  <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                </a>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-400 hover:text-gold-500 transition-colors text-sm flex items-center gap-1 group">
+                  Help Center
+                  <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              </li>
+              
+              {/* Admin Button - Desktop */}
+              <li className="pt-3 mt-3 border-t border-white/10">
+                <Link to="/admin">
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className="flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full 
+                             text-gray-400 hover:text-gold-500 hover:border-gold-500/50 transition-all text-sm w-full justify-center"
+                  >
+                    <Lock size={14} />
+                    Admin Panel
+                  </motion.button>
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
 
       {/* WhatsApp Banner */}
       <div className="border-t border-white/10">
-        <div className="container-custom py-6">
+        <div className="container-custom py-5">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <motion.div 
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
-                className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center"
+                className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0"
               >
                 <MessageCircle size={20} className="text-white" />
               </motion.div>
-              <p className="text-gray-300 text-sm">Order via WhatsApp for quick service</p>
+              <div>
+                <p className="text-white text-sm font-medium">Order via WhatsApp</p>
+                <p className="text-gray-400 text-xs">Quick and easy ordering available 24/7</p>
+              </div>
             </div>
             <a
               href="https://wa.me/923001234567"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-full text-sm font-medium hover:bg-green-700 transition-colors"
+              className="flex items-center gap-2 px-6 py-2.5 bg-green-600 text-white rounded-full text-sm font-medium hover:bg-green-700 transition-colors shadow-lg shadow-green-500/20"
             >
               <MessageCircle size={16} />
               Chat Now
@@ -173,14 +189,27 @@ export default function Footer() {
 
       {/* Bottom Bar */}
       <div className="border-t border-white/10">
-        <div className="container-custom py-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-6 text-xs text-gray-500">
-              <span>Cash on Delivery</span>
+        <div className="container-custom py-5">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-3">
+            <p className="text-gray-500 text-xs flex items-center gap-1">
+              &copy; {new Date().getFullYear()} NAZAAKAT. Made with 
+              <Heart size={12} className="text-red-500 fill-red-500" /> 
+              in Pakistan | Elegance in Every Detail
+            </p>
+            <div className="flex items-center gap-5 text-xs text-gray-500">
+              <span className="flex items-center gap-1"><Shield size={12} /> Cash on Delivery</span>
               <span>Bank Transfer</span>
               <span>EasyPaisa</span>
               <span>JazzCash</span>
             </div>
+          </div>
+          
+          {/* Admin Link - Mobile */}
+          <div className="mt-3 text-center md:hidden">
+            <Link to="/admin" className="text-gray-500 hover:text-gold-500 text-xs flex items-center justify-center gap-1">
+              <Lock size={10} />
+              Admin Panel
+            </Link>
           </div>
         </div>
       </div>
