@@ -4,11 +4,14 @@ import { useNavigate, Link } from 'react-router-dom';
 import { ShoppingBag, MessageCircle, ArrowRight, Truck, Shield, CreditCard, Banknote, Building2, Copy, CheckCircle, Smartphone } from 'lucide-react';
 import useCartStore from '../../store/cartStore';
 import { createOrder } from '../../services/orderService';
+import { checkRateLimit } from '../../utils/rateLimiter';
+import { sendOrderEmailToAdmin } from '../../services/emailService';
 
 function Checkout() {
   const { items, getTotalPrice, clearCart } = useCartStore();
   const navigate = useNavigate();
   const [copied, setCopied] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: '',
     phone: '',
@@ -36,6 +39,18 @@ function Checkout() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Rate limit check
+    const rateCheck = checkRateLimit(form.phone);
+    if (!rateCheck.allowed) {
+      alert(rateCheck.message);
+      setIsSubmitting(false);
+      return;
+    }
+    
+    // PREVENT DOUBLE SUBMISSION
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     
     try {
       const orderData = {
@@ -63,6 +78,7 @@ function Checkout() {
       const result = await createOrder(orderData);
       const orderId = result.orderId || result;
 
+      // WhatsApp message
       let message = `🛍️ *New Order - NAZAAKAT*%0A%0A`;
       message += `👤 *Customer:* ${form.name}%0A`;
       message += `📱 *Phone:* ${form.phone}%0A`;
@@ -81,20 +97,26 @@ function Checkout() {
       
       clearCart();
       navigate(`/order-confirmation/${typeof orderId === 'string' ? orderId : 'pending'}`);
+      
     } catch (error) {
       console.error('Error creating order:', error);
       alert('Failed to place order. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
+
+        // Send email notification (non-blocking)
+    sendOrderEmailToAdmin({
+      ...orderData,
+      orderId: typeof orderId === 'string' ? orderId : 'PENDING'
+    }).catch(() => {}); // Silently fail if email not configured
   };
 
   if (items.length === 0) {
     return (
       <div className="pt-24 pb-16 text-center min-h-screen flex items-center justify-center bg-gray-50">
         <div>
-          <motion.div 
-            animate={{ y: [0, -15, 0] }} 
-            transition={{ duration: 2, repeat: Infinity }}
-          >
+          <motion.div animate={{ y: [0, -15, 0] }} transition={{ duration: 2, repeat: Infinity }}>
             <ShoppingBag className="w-24 h-24 text-gray-300 mx-auto mb-6" />
           </motion.div>
           <h2 className="text-3xl font-serif text-gray-400 mb-4">Your cart is empty</h2>
@@ -113,26 +135,20 @@ function Checkout() {
   return (
     <div className="pt-24 pb-16 bg-gradient-to-b from-gray-50 to-white min-h-screen">
       <div className="max-w-6xl mx-auto px-4">
-        {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <motion.span 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
-            className="text-gold-500 text-xs tracking-[0.3em] uppercase font-medium"
-          >
+          <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}
+            className="text-gold-500 text-xs tracking-[0.3em] uppercase font-medium">
             Complete Your Order
           </motion.span>
           <h1 className="text-4xl md:text-5xl font-serif text-black mt-3">Checkout</h1>
         </motion.div>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* Form */}
           <div className="lg:col-span-2">
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Shipping */}
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-                className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100"
-              >
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
+                className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-gold-50 rounded-xl flex items-center justify-center">
                     <Truck className="text-gold-500" size={20} />
@@ -194,10 +210,8 @@ function Checkout() {
               </motion.div>
 
               {/* Payment */}
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-                className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100"
-              >
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
+                className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-gold-50 rounded-xl flex items-center justify-center">
                     <CreditCard className="text-gold-500" size={20} />
@@ -234,12 +248,9 @@ function Checkout() {
                         <p className="font-semibold text-gray-900">SadaPay</p>
                       </div>
                       <p className="text-sm text-gray-500 mt-1">Instant transfer via SadaPay mobile wallet</p>
-                      
                       {form.payment === 'sadapay' && (
-                        <motion.div 
-                          initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-                          className="mt-4 overflow-hidden"
-                        >
+                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+                          className="mt-4 overflow-hidden">
                           <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-5 border border-purple-200">
                             <div className="flex items-center gap-2 mb-3">
                               <Smartphone size={18} className="text-purple-600" />
@@ -254,23 +265,14 @@ function Checkout() {
                                 <span className="text-sm text-purple-700">Phone Number:</span>
                                 <div className="flex items-center gap-2">
                                   <span className="font-mono font-semibold text-purple-900">0340 7146871</span>
-                                  <motion.button
-                                    whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                                     onClick={() => copyToClipboard('03407146871', 'sadapay')}
-                                    className="p-1.5 hover:bg-purple-100 rounded-lg transition-colors"
-                                  >
-                                    {copied === 'sadapay' ? (
-                                      <CheckCircle size={16} className="text-green-500" />
-                                    ) : (
-                                      <Copy size={16} className="text-purple-500" />
-                                    )}
+                                    className="p-1.5 hover:bg-purple-100 rounded-lg transition-colors">
+                                    {copied === 'sadapay' ? <CheckCircle size={16} className="text-green-500" /> : <Copy size={16} className="text-purple-500" />}
                                   </motion.button>
                                 </div>
                               </div>
                             </div>
-                            <p className="text-xs text-purple-500 mt-3">
-                              💡 Send payment to this SadaPay account and share screenshot on WhatsApp
-                            </p>
                           </div>
                         </motion.div>
                       )}
@@ -289,12 +291,9 @@ function Checkout() {
                         <p className="font-semibold text-gray-900">JazzCash</p>
                       </div>
                       <p className="text-sm text-gray-500 mt-1">Instant transfer via JazzCash mobile wallet</p>
-                      
                       {form.payment === 'jazzcash' && (
-                        <motion.div 
-                          initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-                          className="mt-4 overflow-hidden"
-                        >
+                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+                          className="mt-4 overflow-hidden">
                           <div className="bg-gradient-to-r from-red-50 to-orange-50 rounded-xl p-5 border border-red-200">
                             <div className="flex items-center gap-2 mb-3">
                               <Smartphone size={18} className="text-red-600" />
@@ -309,23 +308,14 @@ function Checkout() {
                                 <span className="text-sm text-red-700">Phone Number:</span>
                                 <div className="flex items-center gap-2">
                                   <span className="font-mono font-semibold text-red-900">0340 7146871</span>
-                                  <motion.button
-                                    whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+                                  <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
                                     onClick={() => copyToClipboard('03407146871', 'jazzcash')}
-                                    className="p-1.5 hover:bg-red-100 rounded-lg transition-colors"
-                                  >
-                                    {copied === 'jazzcash' ? (
-                                      <CheckCircle size={16} className="text-green-500" />
-                                    ) : (
-                                      <Copy size={16} className="text-red-500" />
-                                    )}
+                                    className="p-1.5 hover:bg-red-100 rounded-lg transition-colors">
+                                    {copied === 'jazzcash' ? <CheckCircle size={16} className="text-green-500" /> : <Copy size={16} className="text-red-500" />}
                                   </motion.button>
                                 </div>
                               </div>
                             </div>
-                            <p className="text-xs text-red-500 mt-3">
-                              💡 Send payment to this JazzCash account and share screenshot on WhatsApp
-                            </p>
                           </div>
                         </motion.div>
                       )}
@@ -344,47 +334,16 @@ function Checkout() {
                         <p className="font-semibold text-gray-900">Bank Transfer</p>
                       </div>
                       <p className="text-sm text-gray-500 mt-1">Transfer directly to our bank account</p>
-                      
                       {form.payment === 'bank' && (
-                        <motion.div 
-                          initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
-                          className="mt-4 overflow-hidden"
-                        >
+                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }}
+                          className="mt-4 overflow-hidden">
                           <div className="bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-5 border border-blue-200">
-                            <div className="flex items-center gap-2 mb-3">
-                              <Building2 size={18} className="text-blue-600" />
-                              <p className="font-semibold text-blue-800">Bank Account Details</p>
+                            <p className="font-semibold text-blue-800 mb-3">Bank Account Details</p>
+                            <div className="space-y-2">
+                              <p className="text-sm text-blue-700">Bank: <strong>Meezan Bank</strong></p>
+                              <p className="text-sm text-blue-700">Title: <strong>Abdul Ghani</strong></p>
+                              <p className="text-sm text-blue-700">Account: <strong>1234567890123456</strong></p>
                             </div>
-                            <div className="space-y-3">
-                              <div className="flex justify-between items-center">
-                                <span className="text-sm text-blue-700">Bank:</span>
-                                <span className="font-semibold text-blue-900">Meezan Bank</span>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="text-sm text-blue-700">Account Title:</span>
-                                <span className="font-semibold text-blue-900">Abdul Ghani</span>
-                              </div>
-                              <div className="flex justify-between items-center">
-                                <span className="text-sm text-blue-700">Account Number:</span>
-                                <div className="flex items-center gap-2">
-                                  <span className="font-mono font-semibold text-blue-900">1234567890123456</span>
-                                  <motion.button
-                                    whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-                                    onClick={() => copyToClipboard('1234567890123456', 'bank')}
-                                    className="p-1.5 hover:bg-blue-100 rounded-lg transition-colors"
-                                  >
-                                    {copied === 'bank' ? (
-                                      <CheckCircle size={16} className="text-green-500" />
-                                    ) : (
-                                      <Copy size={16} className="text-blue-500" />
-                                    )}
-                                  </motion.button>
-                                </div>
-                              </div>
-                            </div>
-                            <p className="text-xs text-blue-500 mt-3">
-                              💡 Transfer amount and share receipt screenshot on WhatsApp
-                            </p>
                           </div>
                         </motion.div>
                       )}
@@ -394,62 +353,51 @@ function Checkout() {
               </motion.div>
 
               {/* Notes */}
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-                className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100"
-              >
+              <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
+                className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
                 <label className="block text-sm font-medium text-gray-700 mb-2">Order Notes (Optional)</label>
                 <textarea name="notes" value={form.notes} onChange={handleChange} rows={2}
                   placeholder="Any special instructions for your order..."
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gold-500 focus:border-transparent outline-none resize-none transition-all" />
               </motion.div>
 
-              {/* WhatsApp Info Banner */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-                className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-5 border border-green-200 flex items-center gap-4"
-              >
-                <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
-                  <MessageCircle size={24} className="text-white" />
-                </div>
-                <div>
-                  <p className="font-semibold text-green-800">Your order will be confirmed via WhatsApp</p>
-                  <p className="text-sm text-green-600">You'll receive order updates and delivery confirmation</p>
-                </div>
-              </motion.div>
-
-              {/* Submit */}
+              {/* Submit Button */}
               <motion.button
-                whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}
+                whileHover={!isSubmitting ? { scale: 1.01 } : {}}
+                whileTap={!isSubmitting ? { scale: 0.98 } : {}}
                 type="submit"
-                className="w-full py-5 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-full text-lg font-semibold hover:from-green-700 hover:to-emerald-700 flex items-center justify-center gap-3 shadow-xl shadow-green-500/25 transition-all">
-                <MessageCircle size={22} />
-                Place Order via WhatsApp
-                <ArrowRight size={20} />
+                disabled={isSubmitting}
+                className={`w-full py-5 text-white rounded-full text-lg font-semibold flex items-center justify-center gap-3 shadow-xl transition-all ${
+                  isSubmitting 
+                    ? 'bg-gray-400 cursor-not-allowed' 
+                    : 'bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-green-500/25'
+                }`}>
+                {isSubmitting ? (
+                  <>Processing Order...</>
+                ) : (
+                  <>
+                    <MessageCircle size={22} />
+                    Place Order via WhatsApp
+                    <ArrowRight size={20} />
+                  </>
+                )}
               </motion.button>
             </form>
           </div>
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <motion.div 
-              initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-24"
-            >
+            <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
+              className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-24">
               <div className="flex items-center gap-2 mb-6">
                 <ShoppingBag className="text-gold-500" size={20} />
                 <h2 className="text-xl font-serif">Order Summary</h2>
               </div>
-              
               <div className="space-y-3 mb-6 max-h-64 overflow-y-auto">
                 {items.map((item, i) => (
-                  <motion.div 
-                    key={item.id} 
-                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * i }}
-                    className="flex gap-3 p-3 bg-gray-50 rounded-xl"
-                  >
-                    <img src={item.images?.[0] || item.image || 'https://via.placeholder.com/50'} alt="" 
-                      className="w-14 h-14 rounded-lg object-cover" />
+                  <motion.div key={item.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * i }}
+                    className="flex gap-3 p-3 bg-gray-50 rounded-xl">
+                    <img src={item.images?.[0] || item.image || 'https://via.placeholder.com/50'} alt="" className="w-14 h-14 rounded-lg object-cover" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{item.title}</p>
                       <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
@@ -458,7 +406,6 @@ function Checkout() {
                   </motion.div>
                 ))}
               </div>
-
               <div className="border-t pt-4 space-y-2">
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-500">Subtotal</span>
@@ -470,33 +417,9 @@ function Checkout() {
                     {shipping === 0 ? '🎉 FREE' : `PKR ${shipping}`}
                   </span>
                 </div>
-                {shipping > 0 && (
-                  <p className="text-xs text-gray-400">Free shipping on orders above PKR 5,000</p>
-                )}
                 <div className="flex justify-between text-lg font-bold pt-3 border-t">
                   <span>Total</span>
-                  <motion.span 
-                    key={grandTotal}
-                    initial={{ scale: 1.1 }} animate={{ scale: 1 }}
-                    className="text-gold-500"
-                  >
-                    PKR {grandTotal.toLocaleString()}
-                  </motion.span>
-                </div>
-              </div>
-
-              <div className="mt-5 space-y-3">
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <Truck size={14} className="text-gold-500" />
-                  Free shipping over PKR 5,000
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <Shield size={14} className="text-green-500" />
-                  Secure ordering via WhatsApp
-                </div>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
-                  <Smartphone size={14} className="text-purple-500" />
-                  SadaPay & JazzCash accepted
+                  <span className="text-gold-500">PKR {grandTotal.toLocaleString()}</span>
                 </div>
               </div>
             </motion.div>

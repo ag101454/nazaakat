@@ -1,18 +1,44 @@
 import { collection, addDoc, updateDoc, doc, getDocs, getDoc, query, orderBy } from 'firebase/firestore';
 import { db } from './firebase';
-import { AIAgent } from './aiAgent';
 
 const COLLECTION = 'orders';
+let isCreatingOrder = false;
 
-// Create order with AI processing
+// Create order
 export const createOrder = async (orderData) => {
+  if (isCreatingOrder) {
+    throw new Error('Order is already being processed');
+  }
+  
+  isCreatingOrder = true;
+  
   try {
-    // Process through AI Agent
-    const result = await AIAgent.processOrder(orderData);
-    return result;
+    // Check for duplicate within 10 seconds
+    const allOrders = await getAllOrders();
+    const duplicate = allOrders.find(o => {
+      const timeDiff = Date.now() - new Date(o.createdAt).getTime();
+      return timeDiff < 10000 &&
+        o.customerInfo?.phone === orderData.customerInfo?.phone &&
+        o.totalPrice === orderData.totalPrice;
+    });
+    
+    if (duplicate) {
+      return { orderId: duplicate.id, isDuplicate: true };
+    }
+
+    const docRef = await addDoc(collection(db, COLLECTION), {
+      ...orderData,
+      status: 'pending',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+    
+    return { orderId: docRef.id, isDuplicate: false };
   } catch (error) {
     console.error('Error creating order:', error);
     throw error;
+  } finally {
+    isCreatingOrder = false;
   }
 };
 
@@ -40,21 +66,13 @@ export const getOrderById = async (id) => {
   }
 };
 
-// Update order status (Accept/Reject)
-export const updateOrderStatus = async (id, status, notes = '') => {
+// Update order status
+export const updateOrderStatus = async (id, status) => {
   try {
-    const timeline = [{
-      status: status === 'accepted' ? 'Order Accepted' : 'Order Rejected',
-      time: new Date().toISOString(),
-      message: notes || `Order ${status} by admin`
-    }];
-
     await updateDoc(doc(db, COLLECTION, id), {
       status,
       updatedAt: new Date().toISOString(),
-      timeline
     });
-
     return true;
   } catch (error) {
     console.error('Error updating order:', error);
@@ -66,26 +84,18 @@ export const updateOrderStatus = async (id, status, notes = '') => {
 export const getOrderAnalytics = async () => {
   try {
     const orders = await getAllOrders();
-    
-    const analytics = {
+    return {
       total: orders.length,
       pending: orders.filter(o => o.status === 'pending').length,
       accepted: orders.filter(o => o.status === 'accepted').length,
       rejected: orders.filter(o => o.status === 'rejected').length,
-      autoAccepted: orders.filter(o => o.autoAccepted).length,
-      revenue: orders
-        .filter(o => o.status === 'accepted')
-        .reduce((sum, o) => sum + (o.totalPrice || 0), 0),
-      highRisk: orders.filter(o => o.aiAnalysis?.riskLevel === 'high').length,
+      revenue: orders.filter(o => o.status === 'accepted').reduce((sum, o) => sum + (o.totalPrice || 0), 0),
       todayOrders: orders.filter(o => {
-        const today = new Date().toDateString();
-        return new Date(o.createdAt).toDateString() === today;
+        return new Date(o.createdAt).toDateString() === new Date().toDateString();
       }).length,
     };
-
-    return analytics;
   } catch (error) {
     console.error('Error getting analytics:', error);
-    return null;
+    return { total: 0, pending: 0, accepted: 0, rejected: 0, revenue: 0, todayOrders: 0 };
   }
 };

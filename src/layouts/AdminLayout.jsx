@@ -3,7 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { LayoutDashboard, Package, ShoppingBag, LogOut, Menu, X, ArrowLeft, Lock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ADMIN_PASSWORD = 'nazaakat12345/67890';
+const ADMIN_PASSWORD = 'nazakkat2024';
 
 const sidebarLinks = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/admin' },
@@ -31,7 +31,7 @@ export default function AdminLayout() {
       sessionStorage.setItem('admin-auth', 'true');
       setError('');
     } else {
-      setError('Incorrect password');
+      setError('Incorrect password!');
       setPassword('');
     }
   };
@@ -80,7 +80,7 @@ export default function AdminLayout() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter password"
+              placeholder="Enter admin password"
               autoFocus
               className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white 
                        placeholder-gray-500 focus:border-gold-500 focus:outline-none transition-colors text-center text-lg"
@@ -113,13 +113,12 @@ export default function AdminLayout() {
       </AnimatePresence>
 
       <motion.aside
-        initial={{ x: -280 }}
-        animate={{ x: 0 }}
+        initial={{ x: -280 }} animate={{ x: 0 }}
         className={`fixed lg:static inset-y-0 left-0 z-50 w-64 bg-black text-white transform transition-transform duration-300
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'} flex flex-col`}
       >
         <div className="p-6 border-b border-white/10">
-          <Link to="/admin"><h2 className="text-2xl font-serif tracking-wider">NAZAKKAT</h2></Link>
+          <Link to="/admin"><h2 className="text-2xl font-serif tracking-wider">NAZAAKAT</h2></Link>
           <p className="text-xs text-gray-400 mt-1">Admin Panel</p>
         </div>
 
@@ -150,7 +149,12 @@ export default function AdminLayout() {
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden p-2 hover:bg-gray-100 rounded-lg">
             {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
-          <Link to="/" className="text-sm text-gray-500 hover:text-gold-500 ml-auto">View Store →</Link>
+          <div className="flex items-center gap-4 ml-auto">
+            <button onClick={handleLogout} className="text-sm text-gray-500 hover:text-red-500">
+              Logout
+            </button>
+            <Link to="/" className="text-sm text-gray-500 hover:text-gold-500">View Store →</Link>
+          </div>
         </header>
 
         <main className="flex-1 p-6">
