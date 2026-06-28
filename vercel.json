@@ -1,7 +1,15 @@
 {
     "rewrites": [
       {
-        "source": "/((?!sitemap.xml|robots.txt|sw.js|favicon.ico|site.webmanifest|apple-touch-icon.png|favicon-32x32.png|favicon-16x16.png).*)",
+        "source": "/sitemap.xml",
+        "destination": "/sitemap.xml"
+      },
+      {
+        "source": "/robots.txt",
+        "destination": "/robots.txt"
+      },
+      {
+        "source": "/(.*)",
         "destination": "/index.html"
       }
     ]
