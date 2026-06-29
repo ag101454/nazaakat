@@ -16,12 +16,14 @@ import AdminOrders from '../pages/admin/Orders';
 import Blog from '../pages/public/Blog';
 import BlogDetail from '../pages/public/BlogDetail';
 import Reviews from '../pages/public/Reviews';
+import VisualSearch from '../pages/public/VisualSearch';
 
 export default function AppRoutes() {
   return (
     <Routes>
       {/* Public Routes */}
       <Route element={<MainLayout />}>
+      <Route path="/visual-search" element={<VisualSearch />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/:slug" element={<BlogDetail />} />
       <Route path="/reviews" element={<Reviews />} />

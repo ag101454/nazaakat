@@ -1,6 +1,7 @@
+// src/components/layout/Navbar.jsx
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Heart, Menu, X, MessageCircle } from 'lucide-react';
+import { ShoppingBag, Heart, Menu, X, MessageCircle, Camera } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import useCartStore from '../../store/cartStore';
 import CartDrawer from '../cart/CartDrawer';
@@ -43,6 +44,7 @@ function Navbar() {
     { label: 'Bags', path: '/products?category=bags' },
     { label: 'Jewelry', path: '/products?category=jewelry' },
     { label: 'Accessories', path: '/products?category=accessories' },
+    { label: 'Visual Search', path: '/visual-search', icon: Camera },
     { label: 'About', path: '/about' },
   ];
 
@@ -94,13 +96,14 @@ function Navbar() {
             </Link>
 
             {/* Desktop Links */}
-            <div className="hidden md:flex items-center gap-6 lg:gap-8">
+            <div className="hidden md:flex items-center gap-5 lg:gap-7">
               {navLinks.map((link) => (
                 <Link
                   key={link.label}
                   to={link.path}
-                  className="relative text-gray-300 hover:text-gold-500 transition-colors text-sm group py-1"
+                  className="relative text-gray-300 hover:text-gold-500 transition-colors text-sm group py-1 flex items-center gap-1.5"
                 >
+                  {link.icon && <link.icon size={14} className="text-gray-300 group-hover:text-gold-500 transition-colors" />}
                   {link.label}
                   <motion.span 
                     className="absolute bottom-0 left-0 w-0 h-0.5 bg-gold-500 group-hover:w-full transition-all duration-300"
@@ -112,11 +115,16 @@ function Navbar() {
 
             {/* Actions */}
             <div className="flex items-center gap-3 md:gap-4">
+              {/* Visual Search - Mobile Icon */}
+              <Link to="/visual-search" className="md:hidden text-gray-300 hover:text-gold-500 transition-colors" title="Visual Search">
+                <Camera size={20} />
+              </Link>
+
               {/* WhatsApp CTA - Desktop */}
               <motion.a
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                href="https://wa.me/92340746871"
+                href="https://wa.me/923407146871"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-green-600 text-white rounded-full text-xs font-medium hover:bg-green-700 transition-colors shadow-lg shadow-green-600/20"
@@ -184,8 +192,9 @@ function Navbar() {
                       <Link
                         to={link.path}
                         onClick={() => setMenuOpen(false)}
-                        className="block py-3 px-2 text-gray-300 hover:text-gold-500 text-base transition-colors"
+                        className="flex items-center gap-2 py-3 px-2 text-gray-300 hover:text-gold-500 text-base transition-colors"
                       >
+                        {link.icon && <link.icon size={16} className="text-gray-300" />}
                         {link.label}
                       </Link>
                     </motion.div>
