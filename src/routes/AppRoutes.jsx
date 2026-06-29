@@ -13,12 +13,18 @@ import AdminDashboard from '../pages/admin/Dashboard';
 import AdminProducts from '../pages/admin/Products';
 import AdminAddProduct from '../pages/admin/AddProduct';
 import AdminOrders from '../pages/admin/Orders';
+import Blog from '../pages/public/Blog';
+import BlogDetail from '../pages/public/BlogDetail';
+import Reviews from '../pages/public/Reviews';
 
 export default function AppRoutes() {
   return (
     <Routes>
       {/* Public Routes */}
       <Route element={<MainLayout />}>
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogDetail />} />
+      <Route path="/reviews" element={<Reviews />} />
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />

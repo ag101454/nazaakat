@@ -3,19 +3,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function IntroAnimation({ onComplete }) {
   const [stage, setStage] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    // Detect mobile
-    setIsMobile(window.innerWidth < 768);
+    // Stage 0: Initial white screen
+    const timer1 = setTimeout(() => setStage(1), 300);
     
-    const timer1 = setTimeout(() => setStage(1), 500);
-    const timer2 = setTimeout(() => setStage(2), 2000);
-    const timer3 = setTimeout(() => setStage(3), 2800);
+    // Stage 1: NAZAAKAT appears
+    const timer2 = setTimeout(() => setStage(2), 1800);
+    
+    // Stage 2: Glow effect
+    const timer3 = setTimeout(() => setStage(3), 3000);
+    
+    // Stage 3: Unlock particles
     const timer4 = setTimeout(() => {
       setStage(4);
-      if (onComplete) onComplete();
-    }, 3500);
+      if (onComplete) {
+        setTimeout(() => onComplete(), 500);
+      }
+    }, 4000);
 
     return () => {
       clearTimeout(timer1);
@@ -29,119 +34,116 @@ export default function IntroAnimation({ onComplete }) {
     <AnimatePresence>
       {stage < 4 && (
         <motion.div
-          className="fixed inset-0 z-[999] flex items-center justify-center bg-white overflow-hidden"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-white overflow-hidden"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
         >
           {/* Stage 1: Brand Name Appears */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.5 }}
+            initial={{ opacity: 0, scale: 0.3 }}
             animate={stage >= 1 ? { opacity: 1, scale: 1 } : {}}
-            transition={{ 
-              duration: isMobile ? 0.8 : 1, 
-              ease: [0.25, 0.46, 0.45, 0.94] 
-            }}
-            className="text-center px-4"
+            transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="text-center relative z-10"
           >
             <motion.h1
-              className={`
-                text-black tracking-[0.1em] md:tracking-[0.15em]
-                ${isMobile ? 'text-4xl' : 'text-6xl md:text-8xl lg:text-9xl'}
-              `}
-              style={{ fontFamily: "'Playfair Display', serif" }}
+              className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-black tracking-[0.1em] md:tracking-[0.15em]"
+              style={{ fontFamily: "'Playfair Display', Georgia, serif" }}
             >
-              {isMobile ? (
-                <>
-                  N A Z A<br />A K A T
-                </>
-              ) : (
-                'N A Z A A K A T'
-              )}
+              N A Z A A K A T
             </motion.h1>
             
             <motion.p
-              initial={{ opacity: 0 }}
-              animate={stage >= 1 ? { opacity: 1 } : {}}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className={`
-                text-gold-500 tracking-[0.2em] md:tracking-[0.4em] uppercase mt-4 md:mt-6
-                ${isMobile ? 'text-xs' : 'text-sm md:text-base'}
-              `}
+              initial={{ opacity: 0, y: 20 }}
+              animate={stage >= 1 ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              className="text-gold-500 text-xs sm:text-sm md:text-base tracking-[0.3em] md:tracking-[0.4em] uppercase mt-4 md:mt-6"
             >
               Elegance in Every Detail
             </motion.p>
           </motion.div>
 
-          {/* Stage 2: Glow effect - smaller on mobile */}
+          {/* Stage 2: Glow effect */}
           {stage >= 2 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="absolute inset-0"
+              className="absolute inset-0 pointer-events-none"
             >
               <motion.div
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
                 style={{
-                  width: isMobile ? '300px' : '500px',
-                  height: isMobile ? '300px' : '500px',
-                  background: 'radial-gradient(circle, rgba(212,148,13,0.3) 0%, transparent 70%)',
+                  width: '400px',
+                  height: '400px',
+                  background: 'radial-gradient(circle, rgba(212,148,13,0.25) 0%, transparent 70%)',
                 }}
                 animate={{
-                  scale: isMobile ? [1, 1.3, 1.6] : [1, 1.5, 2],
-                  opacity: [0.3, 0.5, 0],
+                  scale: [1, 1.8, 2.5],
+                  opacity: [0.25, 0.4, 0],
                 }}
-                transition={{ duration: isMobile ? 1.2 : 1.5 }}
+                transition={{ duration: 1.5 }}
               />
             </motion.div>
           )}
 
-          {/* Stage 3: Unlock effect - fewer particles on mobile */}
+          {/* Stage 3: Unlock effect */}
           {stage >= 3 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="absolute inset-0"
+              className="absolute inset-0 pointer-events-none"
             >
-              {/* Lines */}
+              {/* Horizontal gold line */}
               <motion.div
-                className="absolute top-1/2 left-0 right-0 h-[1px]"
+                className="absolute top-1/2 left-[10%] right-[10%] h-[1px]"
                 style={{ background: 'linear-gradient(90deg, transparent, #D4940D, transparent)' }}
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.5 }}
               />
               
+              {/* Vertical gold line */}
               <motion.div
-                className="absolute left-1/2 top-0 bottom-0 w-[1px]"
+                className="absolute left-1/2 top-[10%] bottom-[10%] w-[1px]"
                 style={{ background: 'linear-gradient(0deg, transparent, #D4940D, transparent)' }}
                 initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }}
-                transition={{ duration: 0.4 }}
+                transition={{ duration: 0.5 }}
               />
 
-              {/* Particles - fewer on mobile for performance */}
-              {[...Array(isMobile ? 10 : 20)].map((_, i) => (
+              {/* Burst particles */}
+              {[...Array(15)].map((_, i) => (
                 <motion.div
                   key={i}
-                  className="absolute w-1 h-1 bg-gold-500 rounded-full"
+                  className="absolute w-1.5 h-1.5 bg-gold-500 rounded-full"
                   style={{
                     top: '50%',
                     left: '50%',
                   }}
-                  initial={{ x: 0, y: 0, opacity: 1 }}
+                  initial={{ x: 0, y: 0, opacity: 1, scale: 1 }}
                   animate={{
-                    x: (Math.random() - 0.5) * (isMobile ? 300 : 600),
-                    y: (Math.random() - 0.5) * (isMobile ? 300 : 600),
+                    x: (Math.random() - 0.5) * 500,
+                    y: (Math.random() - 0.5) * 500,
                     opacity: 0,
+                    scale: 0,
                   }}
                   transition={{
-                    duration: isMobile ? 1 : 1.5,
+                    duration: 1.2,
                     delay: Math.random() * 0.3,
                     ease: "easeOut",
                   }}
                 />
               ))}
             </motion.div>
+          )}
+
+          {/* Stage 4: Fade out overlay */}
+          {stage >= 3 && (
+            <motion.div
+              className="absolute inset-0 bg-white"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+            />
           )}
         </motion.div>
       )}

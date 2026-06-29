@@ -66,7 +66,7 @@ export default function Footer() {
 
             {/* Contact Info */}
             <div className="space-y-2.5 mt-6">
-              <a href="tel:+923001234567" className="flex items-center gap-2.5 text-gray-400 hover:text-gold-500 transition-colors text-sm">
+              <a href="tel:+923407146871" className="flex items-center gap-2.5 text-gray-400 hover:text-gold-500 transition-colors text-sm">
                 <Phone size={15} className="text-gold-500 flex-shrink-0" />
                 +92 340 7146871
               </a>
@@ -109,6 +109,8 @@ export default function Footer() {
                 { label: 'About Us', path: '/about' },
                 { label: 'Contact Us', path: '/contact' },
                 { label: 'Track Order', path: '/track-order' },
+                { label: 'Blog', path: '/blog' },
+                { label: 'Reviews', path: '/reviews' },
               ].map((link) => (
                 <li key={link.label}>
                   <Link to={link.path} className="text-gray-400 hover:text-gold-500 transition-colors text-sm flex items-center gap-1 group">
@@ -137,8 +139,20 @@ export default function Footer() {
                   <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                 </Link>
               </li>
+              <li>
+                <Link to="/blog" className="text-gray-400 hover:text-gold-500 transition-colors text-sm flex items-center gap-1 group">
+                  Fashion Blog
+                  <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              </li>
+              <li>
+                <Link to="/reviews" className="text-gray-400 hover:text-gold-500 transition-colors text-sm flex items-center gap-1 group">
+                  Customer Reviews
+                  <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
+                </Link>
+              </li>
               
-              {/* Admin Button - Desktop */}
+              {/* Admin Button */}
               <li className="pt-3 mt-3 border-t border-white/10">
                 <Link to="/admin">
                   <motion.button
@@ -192,13 +206,14 @@ export default function Footer() {
         <div className="container-custom py-5">
           <div className="flex flex-col md:flex-row justify-between items-center gap-3">
             <p className="text-gray-500 text-xs flex items-center gap-1">
-              &copy; {new Date().getFullYear()} NAZAAKAT. Made 
+              &copy; {new Date().getFullYear()} NAZAAKAT. Made with 
+              <Heart size={12} className="text-red-500 fill-red-500" /> 
               in Pakistan | Elegance in Every Detail
             </p>
             <div className="flex items-center gap-5 text-xs text-gray-500">
               <span className="flex items-center gap-1"><Shield size={12} /> Cash on Delivery</span>
               <span>Bank Transfer</span>
-              <span>EasyPaisa</span>
+              <span>SadaPay</span>
               <span>JazzCash</span>
             </div>
           </div>
